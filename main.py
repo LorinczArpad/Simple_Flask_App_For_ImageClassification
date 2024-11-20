@@ -2,9 +2,11 @@ from flask import Flask, request, render_template_string
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
 import numpy as np
 import os
-
+import PIL
 app = Flask(__name__)
 
 CLASS_LABELS = [
@@ -37,8 +39,15 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-MODEL_PATH = 'model.keras'  
-model = load_model(MODEL_PATH)
+MODEL_PATH = 'models/model.keras'  
+try:
+    model = load_model(MODEL_PATH)
+except Exception as e:
+    #Dummy Model for testing the app
+    model  =    Sequential([
+        Dense(10, input_shape=(224, 224, 3), activation='relu'),
+        Dense(3, activation='softmax')  # Assuming a 3-class classification
+    ])
 
 
 def allowed_file(filename):
