@@ -84,7 +84,7 @@ def upload_and_predict():
             score = tf.nn.softmax(predictions[0])
             predicted_label = CLASS_LABELS[np.argmax(score)]
             result = f"Predicted class: {predicted_label}"
-
+            os.remove(file_path)
             return render_template_string("""
             <!doctype html>
             <html lang="en">
