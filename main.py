@@ -85,22 +85,132 @@ def upload_and_predict():
             predicted_label = CLASS_LABELS[np.argmax(score)]
             result = f"Predicted class: {predicted_label}"
 
-            return f"""
-            <p>{result}</p>
-            <p><a href="/">Upload another image</a></p>
-            """
+            return render_template_string("""
+            <!doctype html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Prediction Result</title>
+                <style>
+                    body {
+                        font-family: 'Arial', sans-serif;
+                        background-color: #f9fafb;
+                        color: #333;
+                        margin: 0;
+                        padding: 0;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                    }
+                    .container {
+                        text-align: center;
+                        background: white;
+                        padding: 20px;
+                        border-radius: 10px;
+                        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                        max-width: 400px;
+                        width: 100%;
+                    }
+                    .result {
+                        font-size: 1.2em;
+                        margin: 10px 0;
+                        color: #4bb03a;
+                    }
+                    a {
+                        display: inline-block;
+                        margin-top: 10px;
+                        padding: 10px 20px;
+                        color: white;
+                        background-color: #007bff;
+                        text-decoration: none;
+                        border-radius: 5px;
+                    }
+                    a:hover {
+                        background-color: #0056b3;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Prediction Result</h1>
+                    <p class="result">{{result}}</p>
+                    <a href="/">Upload Another Image</a>
+                </div>
+            </body>
+            </html>
+            """,    result=result)
 
         return "<p>Invalid file type. Only JPG and PNG files are allowed.</p>"
 
     # Render the upload form
     return render_template_string("""
     <!doctype html>
-    <title>Image Classification</title>
-    <h1>Upload an Image for Prediction</h1>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".jpg,.jpeg,.png" required>
-        <input type="submit" value="Upload and Predict">
-    </form>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Image Classification</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f4f4f4;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+            .upload-container {
+                text-align: center;
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                max-width: 400px;
+                width: 100%;
+            }
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 20px;
+                color: #333;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            input[type="file"] {
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background: #f9fafb;
+            }
+            input[type="submit"] {
+                padding: 10px 15px;
+                background-color: #4caf50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 1em;
+            }
+            input[type="submit"]:hover {
+                background-color: #45a049;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="upload-container">
+            <h1>Upload an Image for Prediction</h1>
+            <form method="POST" enctype="multipart/form-data">
+                <input type="file" name="file" accept=".jpg,.jpeg,.png" required>
+                <input type="submit" value="Upload and Predict">
+            </form>
+        </div>
+    </body>
+    </html>
     """)
 
 if __name__ == "__main__":
